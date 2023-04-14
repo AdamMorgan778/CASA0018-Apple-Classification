@@ -22,5 +22,30 @@ Linear Bottlenecks: By omitting ReLU activation from the bottleneck layers' end,
 Depthwise Separable Convolutions: MobileNetV2 leverages "depthwise separable convolutions" to minimize computational complexity compared to standard convolutions. By breaking down the convolution operation into depthwise and pointwise (1x1) convolutions, the network simplifies the process and cuts down on required computations, creating a more efficient and lightweight architecture.
 
 ## Data Collection
+The data was collected in batches of 40 photos containing a 50% split between lady pink and granny smith apples. I increased the training data incrementally until the training set was 200 photos.
+  
+The photos were taken using the OV7675 camera – The photos image width was 160 and image height was 120 before being resized to 96x96 to be compatible with transfer learning. The data was then pre-processed and normalized, and the colour depth used was RGB.
+  
+Photos were taken with different backgrounds, on different surfaces, light conditions, various camera distances from the apple, and a variety of angles.
+
 ![Apple Photos](https://user-images.githubusercontent.com/73647889/232113757-94f8452e-5c73-4d7e-8f48-e0de8d2b6a75.PNG)
+
+## Testing
+A total of 37 experiments were done to find the best algorithm for classifying pink lady and granny smith apples. Here are some discoveries I made during experimenting and tweaking the hyperparameters and training set size of the model:
+  
+The number of neurons in the output layer significantly affects the accuracy of predicting the test set. The models with 0 neurons and 20 neurons delivered the best results on the given data as shown in the bar chart. Despite this, as there was no noticeable improvement in accuracy using 20 neurons, I opted to use 0 neurons to maintain a lower model complexity, which in turn would reduce latency.
+  
+Due to time constraints it was difficult to take 100s of photos, to overcome the small amount of training data I used data augmentation. This method creates random artificial images from the source data using various methods such as random rotations, shifts, and shears. I found the model only benefited from data augmentation when the number of epochs was increased otherwise data augmentation negatively impacted on predicting test data in my experiments. 
+
+By using live classification, I could identify biases in the training dataset, I discovered that red apples would be classified as green if it appears in the top lefthand corner of the image. To counter this I took more images of red apples where the apple appeared in the top lefthand corner. I also discovered that green backgrounds would influence the model to predict red apples as green, so I collected more training data to counter this.
+
+  
+## Future
+•	Creating a significantly larger test set to fine tune the model further. Currently the model predicts all 40 of the test-set correctly so any improvements to the model are not recognisable.
+•	Try using MobileNetV3 for potentially greater accuracy and reduced latency. Reduced latency is the largest concern as the accuracy is already very high. The latency is currently 1.9 seconds which is quite slow for detecting apple type in a self-checkout setting.
+•	Create training dataset that more accurately simulate a self-checkout setting
+•	Increase the number of items able to be classified.
+•	Identify when there is no object present
+
+  
 
