@@ -10,6 +10,8 @@ Pre-trained CNNs are typically trained on massive datasets containing millions o
 
 Research done by Yonis Gulzar in his paper “Fruit Image Classification Model Based on MobileNetV2 with Deep Transfer Learning Technique” found that the best CNN architecture for image classification on their fruit dataset was MobileNetV2. This bar chart shows the accuracy of different models achieved while training on the fruit dataset containing forty different types of fruits. As shown in Figure 1, MobileNetV2 achieves the highest accuracy of 89%. The remaining pre-trained CNNs were 5-11% lower in accuracy than MobileNetV2.
 
+![Pre-trained CNN comparison](https://user-images.githubusercontent.com/73647889/232113670-353c7cc8-0e5e-43a8-8cfe-37e1697f15e4.PNG)
+
 ## MobileNetV2 Neural Architecture
 MobileNetV2 was designed with resource constrained environments such as embedded devices and mobile phones. The neural architecture is as follows:
 
@@ -18,3 +20,7 @@ Inverted Residuals: This design, a variation of residual connections in ResNet, 
 Linear Bottlenecks: By omitting ReLU activation from the bottleneck layers' end, MobileNetV2 preserves crucial information that might otherwise be lost, ensuring predictive accuracy. This results in a compact and efficient model that can still learn complex patterns, striking an ideal balance between efficiency and performance.
 
 Depthwise Separable Convolutions: MobileNetV2 leverages "depthwise separable convolutions" to minimize computational complexity compared to standard convolutions. By breaking down the convolution operation into depthwise and pointwise (1x1) convolutions, the network simplifies the process and cuts down on required computations, creating a more efficient and lightweight architecture.
+
+## Data Collection
+![Apple Photos](https://user-images.githubusercontent.com/73647889/232113757-94f8452e-5c73-4d7e-8f48-e0de8d2b6a75.PNG)
+
