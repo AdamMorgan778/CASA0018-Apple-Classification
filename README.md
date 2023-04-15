@@ -35,12 +35,25 @@ Photos were taken with different backgrounds, on different surfaces, in light co
 
 ## Testing
 A total of 47 experiments were done to find the best algorithm for classifying pink lady and granny smith apples. Here are some discoveries I made during experimenting and tweaking the hyperparameters and training set size of the model and changing the transfer learning model. The different models and hyper-parameters experimented with can be seen in the figure below:
+
+![image](https://user-images.githubusercontent.com/73647889/232224201-82598f62-3b89-44d1-b7d3-1d8114198abb.png)
   
 Due to time constraints it was difficult to take 100s of photos, to overcome the small amount of training data I used data augmentation. This method creates random artificial images from the source data using various methods such as random rotations, shifts, and shears. I found the model only benefited from data augmentation when the number of epochs was increased otherwise data augmentation negatively impacted on predicting test data in my experiments. The improvement in model performance with data augmentation versus wihtout can be seen in the figure below. 
 
+![image](https://user-images.githubusercontent.com/73647889/232224240-a7193e70-79d4-43b0-848c-af2581d00b68.png)
+
 The models listed below share identical hyperparameters and were compared in terms of on-device performance on the Arduino Nano 33 BLE Sense (Cortex-M4F 64MHz). MobileNetV1 96x96 0.1 was ultimately selected due to its high accuracy and fast inferencing time. MobileNetV2, by contrast, exhibited a slower inferencing time. This discrepancy could be attributed to the more complex neural network architecture of V2 compared to V1. Another significant factor influencing inferencing time was the width multiplier; lower values resulted in faster inferencing times. Inferencing time is crucial in self-checkout applications, as it helps reduce queue times and provides a more responsive, improved user experience. Interestingly, MobileNetV1 outperformed MobileNetV2 in both accuracy and inferencing time while using the same hyperparameters and consuming fewer resources, as illustrated in the figure below.
 
+![image](https://user-images.githubusercontent.com/73647889/232224132-e86ff015-3fa4-4642-85b8-8943c49c5817.png)
+
+
 By using live classification, I could identify biases in the training dataset, I discovered that red apples would be classified as green if it appears in the top lefthand corner of the image. To counter this I took more images of red apples where the apple appeared in the top lefthand corner. I also discovered that green backgrounds would influence the model to predict red apples as green, so I collected more training data to counter this.
+
+## Results
+![image](https://user-images.githubusercontent.com/73647889/232224012-acf3fe44-b12f-4c41-85f0-e49c3abb1c67.png)
+
+![image](https://user-images.githubusercontent.com/73647889/232224174-1c3f9f3f-f7e9-4ff8-9d43-d0b75ef49a7e.png)
+
 
 ## Reflection
 A more systematic approach to testing could have been beneficial, as various transfer learning models were only explored in the 38th experiment and beyond due to preconceived notions about MobileNetV2's effectiveness. Testing different models earlier might have helped identify the best option sooner, allowing more time for fine-tuning. By tracking inferencing time, peak RAM usage, and flash usage from the beginning, it would be possible to better understand how different models and hyperparameters impact on-device performance and further reduce inference time.
@@ -48,15 +61,14 @@ A more systematic approach to testing could have been beneficial, as various tra
 More time should have been spent testing the model outside of the edge impulse transfer learning and model testing section. To increase the model's robustness, additional edge cases should have been considered to ensure accurate labelling. Scenarios not taken into account include instances where no apple is present, situations where the camera might misclassify an orange as an apple, or instances where the model might incorrectly classify a golden apple as a pink lady or granny smith.
   
 ## Future
-•	Creating a significantly larger test set to fine tune the model further. Currently the model predicts all 40 of the test-set correctly so any improvements to the model are not recognisable.
+•	Create a larger training and testing dataset for a more robust model and better insight into model performance when comparing different models
+•	Experiment with more transfer learning models
+•	Test different Embedded devices with the models
+•	Experiment with different image sizes
+•	Identify when no apple/ object is present
+•	Expand into a larger range of fruits and vegetables
+•	Create training and testing data that simulate a self-checkout zone for better usability
 
-•	Try using MobileNetV3 for potentially greater accuracy and reduced latency. Reduced latency is the largest concern as the accuracy is already very high. The latency is currently 1.9 seconds which is quite slow for detecting apple type in a self-checkout setting.
-
-•	Create training dataset that more accurately simulate a self-checkout setting
-
-•	Increase the number of items able to be classified.
-
-•	Identify when there is no object present
 
   
 
