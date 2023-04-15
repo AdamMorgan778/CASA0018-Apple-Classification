@@ -12,7 +12,7 @@ Pre-trained CNNs are typically trained on massive datasets containing millions o
 
 Research done by Yonis Gulzar in his paper “Fruit Image Classification Model Based on MobileNetV2 with Deep Transfer Learning Technique” found that the best CNN architecture for image classification on their fruit dataset was MobileNetV2. This bar chart shows the accuracy of different models achieved while training on the fruit dataset containing forty different types of fruits. As shown in Figure 1, MobileNetV2 achieves the highest accuracy of 89%. The remaining pre-trained CNNs were 5-11% lower in accuracy than MobileNetV2.
 
-![Pre-trained CNN comparison](https://user-images.githubusercontent.com/73647889/232118596-8ca3d43c-acaf-49ff-bddb-e8c24997dad1.PNG)
+![image](https://user-images.githubusercontent.com/73647889/232231429-0406aee2-7172-4090-811e-f776cc5ce0fc.png)
 
 ## MobileNetV2 Neural Architecture
 MobileNetV2 was designed with resource constrained environments such as embedded devices and mobile phones. The neural architecture is as follows:
@@ -52,7 +52,7 @@ A total of 47 experiments were done to find the best algorithm for classifying p
   
 Due to time constraints it was difficult to take 100s of photos, to overcome the small amount of training data I used data augmentation. This method creates random artificial images from the source data using various methods such as random rotations, shifts, and shears. I found the model only benefited from data augmentation when the number of epochs was increased otherwise data augmentation negatively impacted on predicting test data in my experiments. The improvement in model performance with data augmentation versus wihtout can be seen in the figure below. 
 
-![image](https://user-images.githubusercontent.com/73647889/232224240-a7193e70-79d4-43b0-848c-af2581d00b68.png)
+![image](https://user-images.githubusercontent.com/73647889/232231518-2bbe0d46-5ffa-42e3-b373-2562ee8f209a.png)
 
 The models listed below share identical hyperparameters and were compared in terms of on-device performance on the Arduino Nano 33 BLE Sense (Cortex-M4F 64MHz). MobileNetV1 96x96 0.1 was ultimately selected due to its high accuracy and fast inferencing time. MobileNetV2, by contrast, exhibited a slower inferencing time. This discrepancy could be attributed to the more complex neural network architecture of V2 compared to V1. Another significant factor influencing inferencing time was the width multiplier; lower values resulted in faster inferencing times. Inferencing time is crucial in self-checkout applications, as it helps reduce queue times and provides a more responsive, improved user experience. Interestingly, MobileNetV1 outperformed MobileNetV2 in both accuracy and inferencing time while using the same hyperparameters and consuming fewer resources, as illustrated in the table below.
 
@@ -120,8 +120,12 @@ By using live classification, I could identify biases in the training dataset, I
 | 47          | 200               | MobileNetV1 | 96x96      | 0.1              | 0       | 0.1      | 160    | 0.0005        | 5              | on                | 100.00%  | 0.04 | 100%             |
 
 ## Results
-![image](https://user-images.githubusercontent.com/73647889/232224012-acf3fe44-b12f-4c41-85f0-e49c3abb1c67.png)
 
+The chosen final model demonstrates outstanding performance with a 100% accuracy rate on the test dataset and a 96.67% accuracy rate on the validation set, even though the Edge Impulse website reported a 100% accuracy. Overall, I am highly satisfied with the model's performance.
+
+![image](https://user-images.githubusercontent.com/73647889/232231896-f7d0ae15-701d-4e37-9eb4-6a047422b04e.png)
+
+The selected model, MobileNetV1 96x96 0.1, exhibited different inferencing times when tested on various embedded devices. These findings emphasize that more powerful devices can substantially reduce inferencing time compared to less capable devices. In the context of self-checkout systems, faster inferencing times are preferable for a seamless user experience. However, the cost of the device should also be considered to balance the expenses associated with purchasing and replacing sensors against the performance improvements achieved.
 
 | Embedded Device | Inferencing time (ms) |
 | --- | --- |
@@ -132,23 +136,15 @@ By using live classification, I could identify biases in the training dataset, I
 ## Reflection
 A more systematic approach to testing could have been beneficial, as various transfer learning models were only explored in the 38th experiment and beyond due to preconceived notions about MobileNetV2's effectiveness. Testing different models earlier might have helped identify the best option sooner, allowing more time for fine-tuning. By tracking inferencing time, peak RAM usage, and flash usage from the beginning, it would be possible to better understand how different models and hyperparameters impact on-device performance and further reduce inference time.
 
-More time should have been spent testing the model outside of the edge impulse transfer learning and model testing section. To increase the model's robustness, additional edge cases should have been considered to ensure accurate labelling. Scenarios not taken into account include instances where no apple is present, situations where the camera might misclassify an orange as an apple, or instances where the model might incorrectly classify a golden apple as a pink lady or granny smith.
+More time should have been spent testing the model outside of the edge impulse transfer learning and model testing section. To increase the model's robustness, additional edge cases should have been considered to ensure accurate labelling. Scenarios not taken into account include instances where no apple is present, situations where the camera might misclassify objects e.g., an orange classified as an apple, or instances where the model might incorrectly classify a golden apple as a pink lady or granny smith.
   
 ## Future
-•	Create a larger training and testing dataset for a more robust model and better insight into model performance when comparing different models
-
-•	Experiment with more transfer learning models
-
-•	Test different Embedded devices with the models
-
-•	Experiment with different image sizes
-
-•	Identify when no apple/ object is present
-
-•	Expand into a larger range of fruits and vegetables
-
-•	Create training and testing data that simulate a self-checkout zone for better usability
-
-
+* Develop a more extensive training and testing dataset to enhance model robustness and enable more accurate performance comparisons between models
+* Explore a wider variety of transfer learning models
+* Evaluate model performance on various embedded devices
+* Experiment with different image resolutions
+* Detect when no apple or object is present in the scene
+* Incorporate a broader selection of fruits and vegetables
+* Generate training and testing data that closely resemble a self-checkout environment for improved practicality
   
 
