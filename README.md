@@ -5,6 +5,8 @@ Being able to correctly identify apple type, fruit type, and other shopping item
 
 Supermarkets in the United Kingdom have approximately £3.2 of goods stolen annually at the self-checkout. The use of computer-vision techniques in self-checkout kiosks could introduce new preventative measures against theft. Missed scans comprise a large portion of how goods go unpaid. 20-30% of missed scans are intentional. Customers also attempt to dupe the system by weighing an incorrect item for a lower price. The use of computer vision helps to reduce missed scans and catch customers aiming to trick the system (Gitnux, 2023).
 
+
+
 ## Literature Review
 Pre-trained CNNs are typically trained on massive datasets containing millions of labelled images, covering a wide range of object types. The early layers within these pre-trained models detect low-level features such as textures and edges. Deeper levels recognise more complex features. The final layers of the pre-trained model are fine-tuned and trained on a new dataset for more accurate predictions on the new target classes. As a result of this setup, there are various benefits of using transfer learning over training a CNN from scratch. The knowledge obtained in the pre-trained CNN is maintained and improves the predictive accuracy of the new target class. The model requires less training data than building a CNN from scratch due to generalizability from the pre-training and reduces the probability of overfitting. This results in a less computationally expensive model to train for faster iterations to improve predictive accuracy. 
 
@@ -34,26 +36,98 @@ Photos were taken with different backgrounds, on different surfaces, in light co
 
 
 ## Testing
-A total of 47 experiments were done to find the best algorithm for classifying pink lady and granny smith apples. Here are some discoveries I made during experimenting and tweaking the hyperparameters and training set size of the model and changing the transfer learning model. The different models and hyper-parameters experimented with can be seen in the figure below:
+A total of 47 experiments were done to find the best algorithm for classifying pink lady and granny smith apples. Here are some discoveries I made during experimenting and tweaking the hyperparameters and training set size of the model and changing the transfer learning model. The different models and hyper-parameters experimented with can be seen in the table below:
 
-![image](https://user-images.githubusercontent.com/73647889/232224201-82598f62-3b89-44d1-b7d3-1d8114198abb.png)
+| Category          | Setting                              |
+| ----------------- | ------------------------------------ |
+| Training data     | 40, 80, 120, 160, 200                |
+| Model             | MobileNetV1, MobileNetV2             |
+| Resolution        | 96x96                                |
+| Width multiplier  | 0.2, 0.25, 0.35                      |
+| Neurons           | 0, 4, 8, 12, 16, 20, 24, 48, 62, 128 |
+| Epochs            | 20, 40, 50, 60, 70, 100, 120, 160    |
+| Dropout           | 0.1, 0.3                             |
+| data augmentation | off, on                              |
+
   
 Due to time constraints it was difficult to take 100s of photos, to overcome the small amount of training data I used data augmentation. This method creates random artificial images from the source data using various methods such as random rotations, shifts, and shears. I found the model only benefited from data augmentation when the number of epochs was increased otherwise data augmentation negatively impacted on predicting test data in my experiments. The improvement in model performance with data augmentation versus wihtout can be seen in the figure below. 
 
 ![image](https://user-images.githubusercontent.com/73647889/232224240-a7193e70-79d4-43b0-848c-af2581d00b68.png)
 
-The models listed below share identical hyperparameters and were compared in terms of on-device performance on the Arduino Nano 33 BLE Sense (Cortex-M4F 64MHz). MobileNetV1 96x96 0.1 was ultimately selected due to its high accuracy and fast inferencing time. MobileNetV2, by contrast, exhibited a slower inferencing time. This discrepancy could be attributed to the more complex neural network architecture of V2 compared to V1. Another significant factor influencing inferencing time was the width multiplier; lower values resulted in faster inferencing times. Inferencing time is crucial in self-checkout applications, as it helps reduce queue times and provides a more responsive, improved user experience. Interestingly, MobileNetV1 outperformed MobileNetV2 in both accuracy and inferencing time while using the same hyperparameters and consuming fewer resources, as illustrated in the figure below.
+The models listed below share identical hyperparameters and were compared in terms of on-device performance on the Arduino Nano 33 BLE Sense (Cortex-M4F 64MHz). MobileNetV1 96x96 0.1 was ultimately selected due to its high accuracy and fast inferencing time. MobileNetV2, by contrast, exhibited a slower inferencing time. This discrepancy could be attributed to the more complex neural network architecture of V2 compared to V1. Another significant factor influencing inferencing time was the width multiplier; lower values resulted in faster inferencing times. Inferencing time is crucial in self-checkout applications, as it helps reduce queue times and provides a more responsive, improved user experience. Interestingly, MobileNetV1 outperformed MobileNetV2 in both accuracy and inferencing time while using the same hyperparameters and consuming fewer resources, as illustrated in the table below.
 
-![image](https://user-images.githubusercontent.com/73647889/232224132-e86ff015-3fa4-4642-85b8-8943c49c5817.png)
+| Model                  | Inferencing time (ms) | Peak ram usage (K) | Flash usage (K) | Accuracy (%) | Loss | Test Accuracy (%) |
+| ---------------------- | --------------------- | ------------------ | --------------- | ------------ | ---- | ----------------- |
+| MobileNetV2 96x96 0.35 | 1,978                 | 333.7              | 581.8           | 100          | 0.04 | 92.86             |
+| MobileNetV2 96x96 0.1  | 961                   | 279.9              | 219             | 100          | 0.01 | 92.86             |
+| MobileNetV2 96x96 0.05 | 825                   | 270                | 169             | 100          | 0    | 92.86             |
+| MobileNetV1 96x96 0.2  | 812                   | 100.1              | 224.4           | 100          | 0.04 | 96.43             |
+| MobileNetV1 96x96 0.1  | 207                   | 59.9               | 107             | 100          | 0.04 | 100               |
 
 
 By using live classification, I could identify biases in the training dataset, I discovered that red apples would be classified as green if it appears in the top lefthand corner of the image. To counter this I took more images of red apples where the apple appeared in the top lefthand corner. I also discovered that green backgrounds would influence the model to predict red apples as green, so I collected more training data to counter this.
 
+### All Experiments
+
+| Test Number | Training data (n) | NN type     | Resolution | Width Multiplier | Neurons | drop out | Epochs | Learning rate | validation (%) | data augmentation | Accuracy | Loss | Testing Accuracy |
+| ----------- | ----------------- | ----------- | ---------- | ---------------- | ------- | -------- | ------ | ------------- | -------------- | ----------------- | -------- | ---- | ---------------- |
+| 1           | 40                | MobileNetV2 | 96x96      | 0.35             | 16      | 0.1      | 20     | 0.0005        | 20             | off               | 75.00%   | 0.56 | 72%              |
+| 2           | 40                | MobileNetV2 | 96x96      | 0.35             | 16      | 0.1      | 20     | 0.0005        | 20             | on                | 75.00%   | 0.55 | 70%              |
+| 3           | 40                | MobileNetV2 | 96x96      | 0.35             | 16      | 0.1      | 20     | 0.0005        | 20             | on                | 75.00%   | 0.66 | 68%              |
+| 4           | 40                | MobileNetV2 | 96x96      | 0.35             | 16      | 0.1      | 20     | 0.0005        | 20             | off               | 75.00%   | 0.56 | 72%              |
+| 5           | 40                | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 20     | 0.0005        | 20             | off               | 87.50%   | 0.54 | 80%              |
+| 6           | 40                | MobileNetV2 | 96x96      | 0.35             | 4       | 0.1      | 20     | 0.0005        | 20             | off               | 87.50%   | 0.43 | 66%              |
+| 7           | 40                | MobileNetV2 | 96x96      | 0.35             | 8       | 0.1      | 20     | 0.0005        | 20             | on                | 62.50%   | 0.74 | 44%              |
+| 8           | 40                | MobileNetV2 | 96x96      | 0.35             | 12      | 0.1      | 20     | 0.0005        | 20             | on                | 87.50%   | 0.49 | 58%              |
+| 9           | 40                | MobileNetV2 | 96x96      | 0.35             | 20      | 0.1      | 20     | 0.0005        | 20             | off               | 80.00%   | 0.29 | 78%              |
+| 10          | 40                | MobileNetV2 | 96x96      | 0.35             | 20      | 0.1      | 20     | 0.0005        | 20             | off               | 80.00%   | 0.27 | 80%              |
+| 11          | 40                | MobileNetV2 | 96x96      | 0.35             | 24      | 0.1      | 20     | 0.0005        | 20             | off               | 40.00%   | 1.13 | 68%              |
+| 12          | 40                | MobileNetV2 | 96x96      | 0.35             | 48      | 0.1      | 20     | 0.0005        | 20             | off               | 60.00%   | 0.91 | 72%              |
+| 13          | 40                | MobileNetV2 | 96x96      | 0.35             | 62      | 0.1      | 20     | 0.0005        | 20             | off               | 60.00%   | 0.93 | 72%              |
+| 14          | 40                | MobileNetV2 | 96x96      | 0.35             | 128     | 0.1      | 20     | 0.0005        | 20             | off               | 60.00%   | 0.64 | 74%              |
+| 15          | 40                | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 50     | 0.0005        | 20             | off               | 87.50%   | 0.54 | 80%              |
+| 16          | 40                | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 90     | 0.0005        | 20             | off               | 87.50%   | 0.54 | 80%              |
+| 17          | 40                | MobileNetV2 | 96x96      | 0.35             | 0       | 0.3      | 20     | 0.0005        | 20             | off               | 87.50%   | 0.57 | 80%              |
+| 18          | 40                | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 20     | 0.0005        | 10             | off               | 75.00%   | 0.24 | 80%              |
+| 19          | 80                | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 20     | 0.0005        | 20             | off               | 100.00%  | 0.06 | 92%              |
+| 20          | 80                | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 40     | 0.0005        | 10             | off               | 87.50%   | 0.11 | 92%              |
+| 21          | 80                | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 40     | 0.0005        | 15             | off               | 91.70%   | 0.19 | 94%              |
+| 22          | 80                | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 20     | 0.0005        | 10             | off               | 87.50%   | 0.34 | 92%              |
+| 23          | 120               | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 20     | 0.0005        | 10             | off               | 91.70%   | 0.15 | 94%              |
+| 24          | 120               | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 40     | 0.0005        | 10             | off               | 91.70%   | 0.14 | 96%              |
+| 25          | 160               | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 40     | 0.0005        | 10             | off               | 92.00%   | 0.14 | 96%              |
+| 26          | 160               | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 40     | 0.0005        | 10             | off               | 87.20%   | 0.34 | 88%              |
+| 27          | 160               | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 70     | 0.0005        | 10             | off               | 87.20%   | 0.14 | 88%              |
+| 28          | 160               | MobileNetV2 | 96x96      | 0.35             | 4       | 0.1      | 20     | 0.0005        | 10             | off               | 100.00%  | 0.21 | 94%              |
+| 29          | 160               | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 20     | 0.0005        | 10             | off               | 100.00%  | 0.03 | 98%              |
+| 30          | 200               | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 20     | 0.0005        | 10             | off               | 100.00%  | 0.05 | 98%              |
+| 31          | 200               | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 20     | 0.0005        | 5              | off               | 100.00%  | 0.05 | 98%              |
+| 32          | 200               | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 40     | 0.0005        | 10             | on                | 90.00%   | 1.80 | 100%             |
+| 33          | 160               | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 40     | 0.0005        | 10             | on                | 94.10%   | 0.10 | 100%             |
+| 34          | 120               | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 40     | 0.0005        | 10             | on                | 92.30%   | 0.09 | 100%             |
+| 35          | 80                | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 40     | 0.0005        | 10             | on                | 90.00%   | 0.57 | 94%              |
+| 36          | 40                | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 40     | 0.0005        | 10             | on                | 80.00%   | 0.65 | 80%              |
+| 37          | 200               | MobileNetV2 | 96x96      | 0.35             | 0       | 0.1      | 40     | 0.0005        | 10             | on                | 94.70%   | 0.07 | 100%             |
+| 38          | 200               | MobileNetV1 | 96x96      | 0.25             | 0       | 0.1      | 40     | 0.0005        | 10             | on                | 89.50%   | 0.29 | 64%              |
+| 39          | 200               | MobileNetV1 | 96x96      | 0.25             | 0       | 0.1      | 60     | 0.0005        | 5              | on                | 90.00%   | 0.27 | 64%              |
+| 40          | 200               | MobileNetV1 | 96x96      | 0.25             | 0       | 0.1      | 40     | 0.0005        | 5              | on                | 78.90%   | 0.35 | 51%              |
+| 41          | 200               | MobileNetV1 | 96x96      | 0.2              | 0       | 0.1      | 100    | 0.0005        | 5              | on                | 100.00%  | 0.09 | 71%              |
+| 42          | 200               | MobileNetV1 | 96x96      | 0.2              | 0       | 0.1      | 120    | 0.0005        | 5              | on                | 90.00%   | 0.24 | 79%              |
+| 43          | 200               | MobileNetV1 | 96x96      | 0.2              | 0       | 0.1      | 160    | 0.0005        | 5              | on                | 90.00%   | 0.21 | 79%              |
+| 44          | 200               | MobileNetV1 | 96x96      | 0.2              | 0       | 0.1      | 160    | 0.0005        | 5              | on                | 100.00%  | 0.04 | 96%              |
+| 45          | 200               | MobileNetV2 | 96x96      | 0.1              | 0       | 0.1      | 160    | 0.0005        | 5              | on                | 100.00%  | 0.01 | 93%              |
+| 46          | 200               | MobileNetV2 | 96x96      | 0.05             | 0       | 0.1      | 160    | 0.0005        | 5              | on                | 100.00%  | 0.00 | 93%              |
+| 47          | 200               | MobileNetV1 | 96x96      | 0.1              | 0       | 0.1      | 160    | 0.0005        | 5              | on                | 100.00%  | 0.04 | 100%             |
+
 ## Results
 ![image](https://user-images.githubusercontent.com/73647889/232224012-acf3fe44-b12f-4c41-85f0-e49c3abb1c67.png)
 
-![image](https://user-images.githubusercontent.com/73647889/232224174-1c3f9f3f-f7e9-4ff8-9d43-d0b75ef49a7e.png)
 
+| Embedded Device | Inferencing time (ms) |
+| --- | --- |
+| Arduino Nano 33 BLE Sense (Cortex-M4F 64MHz)| 207 |
+| Arduino Nicla Vision (Cortex-M7 480MHz) | 16 |
+| Arduino Portenta H7 (Cortex-M7 480MHz) | 16 |
 
 ## Reflection
 A more systematic approach to testing could have been beneficial, as various transfer learning models were only explored in the 38th experiment and beyond due to preconceived notions about MobileNetV2's effectiveness. Testing different models earlier might have helped identify the best option sooner, allowing more time for fine-tuning. By tracking inferencing time, peak RAM usage, and flash usage from the beginning, it would be possible to better understand how different models and hyperparameters impact on-device performance and further reduce inference time.
@@ -62,11 +136,17 @@ More time should have been spent testing the model outside of the edge impulse t
   
 ## Future
 •	Create a larger training and testing dataset for a more robust model and better insight into model performance when comparing different models
+
 •	Experiment with more transfer learning models
+
 •	Test different Embedded devices with the models
+
 •	Experiment with different image sizes
+
 •	Identify when no apple/ object is present
+
 •	Expand into a larger range of fruits and vegetables
+
 •	Create training and testing data that simulate a self-checkout zone for better usability
 
 
