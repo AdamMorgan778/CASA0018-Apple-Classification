@@ -1,4 +1,6 @@
 # CASA0018-Apple-Classification
+## Objective
+The objective of my project is to employ computer vision for accurate classification of apples as either Granny Smith or Pink Lady using an Arduino Nano 33 BLE Sense Lite. This model is intended for use in supermarket self-checkout systems. The ultimate goal is to achieve high prediction accuracy while maintaining low inference times.
 
 ## Introduction
 Being able to correctly identify apple type, fruit type, and other shopping items is important for improving the self-service experience in supermarkets. The future of supermarket self-checkouts will involve ai kiosks using computer vision to correctly label food items without the need for barcode scanning or manually inputting your order and quantity into the self-checkout kiosk. This AI approach helps to reduce the queue times in the self-checkout zone. 
@@ -17,11 +19,11 @@ Research done by Yonis Gulzar in his paper “Fruit Image Classification Model B
 ## MobileNetV2 Neural Architecture
 MobileNetV2 was designed with resource constrained environments such as embedded devices and mobile phones. The neural architecture is as follows:
 
-Inverted Residuals: This design, a variation of residual connections in ResNet, reverses the order of bottleneck and wider layers. Inverted residuals consist of an expansion layer, which increases channels, a depthwise convolutional layer for capturing spatial information, and a projection layer, which reduces channels while preserving spatial resolution. This results in reduced computational complexity and enhanced information flow.
+1. Inverted Residuals: This design, a variation of residual connections in ResNet, reverses the order of bottleneck and wider layers. Inverted residuals consist of an expansion layer, which increases channels, a depthwise convolutional layer for capturing spatial information, and a projection layer, which reduces channels while preserving spatial resolution. This results in reduced computational complexity and enhanced information flow.
 
-Linear Bottlenecks: By omitting ReLU activation from the bottleneck layers' end, MobileNetV2 preserves crucial information that might otherwise be lost, ensuring predictive accuracy. This results in a compact and efficient model that can still learn complex patterns, striking an ideal balance between efficiency and performance.
+2. Linear Bottlenecks: By omitting ReLU activation from the bottleneck layers' end, MobileNetV2 preserves crucial information that might otherwise be lost, ensuring predictive accuracy. This results in a compact and efficient model that can still learn complex patterns, striking an good balance between efficiency and performance.
 
-Depthwise Separable Convolutions: MobileNetV2 leverages "depthwise separable convolutions" to minimize computational complexity compared to standard convolutions. By breaking down the convolution operation into depthwise and pointwise (1x1) convolutions, the network simplifies the process and cuts down on required computations, creating a more efficient and lightweight architecture.
+3. Depthwise Separable Convolutions: MobileNetV2 leverages "depthwise separable convolutions" to minimize computational complexity compared to standard convolutions. By breaking down the convolution operation into depthwise and pointwise (1x1) convolutions, the network simplifies the process and cuts down on required computations, creating a more efficient and lightweight architecture.
 
 <img width="251" alt="MobileNetV2" src="https://user-images.githubusercontent.com/73647889/232118629-3c9b290b-a688-4ebb-bcce-d3648d6fc532.png">
 
@@ -36,7 +38,8 @@ Photos were taken with different backgrounds, on different surfaces, in light co
 
 
 ## Testing
-A total of 47 experiments were done to find the best algorithm for classifying pink lady and granny smith apples. Here are some discoveries I made during experimenting and tweaking the hyperparameters and training set size of the model and changing the transfer learning model. The different models and hyper-parameters experimented with can be seen in the table below:
+A total of 47 experiments were conducted to identify the optimal algorithm for classifying Pink Lady and Granny Smith apples. Throughout the experimentation process, various hyperparameters, training set sizes, and transfer learning models were adjusted and compared. Key insights gained during the experimentation are detailed below, along with a table showcasing the various models and hyperparameters tested:
+
 
 | Category          | Setting                              |
 | ----------------- | ------------------------------------ |
@@ -50,11 +53,15 @@ A total of 47 experiments were done to find the best algorithm for classifying p
 | data augmentation | off, on                              |
 
   
-Due to time constraints it was difficult to take 100s of photos, to overcome the small amount of training data I used data augmentation. This method creates random artificial images from the source data using various methods such as random rotations, shifts, and shears. I found the model only benefited from data augmentation when the number of epochs was increased otherwise data augmentation negatively impacted on predicting test data in my experiments. The improvement in model performance with data augmentation versus wihtout can be seen in the figure below. 
+  
+Due to time constraints it was difficult to take 100s of photos, to overcome the small amount of training data I used data augmentation. This method creates random artificial images from the source data using various methods such as random rotations, shifts, and shears. I found the model only benefited from data augmentation when the number of epochs was increased otherwise data augmentation negatively impacted on predicting test data in my experiments. The increase in training data led to improved accuracy, but the gains diminished after reaching 120 training photos. The figure below illustrates the enhancement in model performance when using data augmentation compared to without it.
+
 
 ![image](https://user-images.githubusercontent.com/73647889/232231518-2bbe0d46-5ffa-42e3-b373-2562ee8f209a.png)
 
+
 The models listed below share identical hyperparameters and were compared in terms of on-device performance on the Arduino Nano 33 BLE Sense (Cortex-M4F 64MHz). MobileNetV1 96x96 0.1 was ultimately selected due to its high accuracy and fast inferencing time. MobileNetV2, by contrast, exhibited a slower inferencing time. This discrepancy could be attributed to the more complex neural network architecture of V2 compared to V1. Another significant factor influencing inferencing time was the width multiplier; lower values resulted in faster inferencing times. Inferencing time is crucial in self-checkout applications, as it helps reduce queue times and provides a more responsive, improved user experience. Interestingly, MobileNetV1 outperformed MobileNetV2 in both accuracy and inferencing time while using the same hyperparameters and consuming fewer resources, as illustrated in the table below.
+
 
 | Model                  | Inferencing time (ms) | Peak ram usage (K) | Flash usage (K) | Accuracy (%) | Loss | Test Accuracy (%) |
 | ---------------------- | --------------------- | ------------------ | --------------- | ------------ | ---- | ----------------- |
@@ -121,7 +128,7 @@ By using live classification, I could identify biases in the training dataset, I
 
 ## Results
 
-The chosen final model demonstrates outstanding performance with a 100% accuracy rate on the test dataset and a 96.67% accuracy rate on the validation set, even though the Edge Impulse website reported a 100% accuracy. Overall, I am highly satisfied with the model's performance.
+The selected final model exhibits exceptional performance, achieving a 100% accuracy rate on the test dataset and a 96.67% accuracy rate on the validation set, despite the Edge Impulse website reporting 100% accuracy. Furthermore, it maintains a low inference time of 207 ms. Overall, I am extremely pleased with the model's performance, as it effectively meets my project objective.
 
 ![image](https://user-images.githubusercontent.com/73647889/232231896-f7d0ae15-701d-4e37-9eb4-6a047422b04e.png)
 
