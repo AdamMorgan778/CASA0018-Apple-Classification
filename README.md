@@ -24,11 +24,11 @@ Depthwise Separable Convolutions: MobileNetV2 leverages "depthwise separable con
 <img width="251" alt="MobileNetV2" src="https://user-images.githubusercontent.com/73647889/232118629-3c9b290b-a688-4ebb-bcce-d3648d6fc532.png">
 
 ## Data Collection
-The data was collected in batches of 40 photos containing a 50% split between lady pink and granny smith apples. I increased the training data incrementally until the training set was 200 photos.
-  
-The photos were taken using the OV7675 camera – The photos image width was 160 and image height was 120 before being resized to 96x96 to be compatible with transfer learning. The data was then pre-processed and normalized, and the colour depth used was RGB.
-  
-Photos were taken with different backgrounds, on different surfaces, light conditions, various camera distances from the apple, and a variety of angles.
+The data was collected in batches of 40 photos containing a 50% split between lady pink and granny smith apples. I increased the training data incrementally until the training set was 200 photos. The test set contained a total of 35 photos. This allowed me to see how results improve as the training data set increases.
+
+The photos were taken using the OV7675 camera – The photos image width was 160 and image height was 120 before being resized to 96x96 to be compatible with transfer learning, the smaller image size also makes the process of image classification less resource hungry. The data were then pre-processed and normalized. Colour plays a large role in the classification of apples, so the colour depth was set to RGB.
+
+Photos were taken with different backgrounds, on different surfaces, in light conditions, various camera distances from the apple, and a variety of angles. The figure below showcases a few of the pictures taken with the OV7675 in the training dataset.
 
 ![Apple Photos](https://user-images.githubusercontent.com/73647889/232118661-cec8043e-4380-4b00-b42e-8d301534d8d4.PNG)
 
@@ -42,6 +42,10 @@ Due to time constraints it was difficult to take 100s of photos, to overcome the
 
 By using live classification, I could identify biases in the training dataset, I discovered that red apples would be classified as green if it appears in the top lefthand corner of the image. To counter this I took more images of red apples where the apple appeared in the top lefthand corner. I also discovered that green backgrounds would influence the model to predict red apples as green, so I collected more training data to counter this.
 
+## Reflection
+A more systematic approach to testing could have been beneficial, as various transfer learning models were only explored in the 38th experiment and beyond due to preconceived notions about MobileNetV2's effectiveness. Testing different models earlier might have helped identify the best option sooner, allowing more time for fine-tuning. By tracking inferencing time, peak RAM usage, and flash usage from the beginning, it would be possible to better understand how different models and hyperparameters impact on-device performance and further reduce inference time.
+
+More time should have been spent testing the model outside of the edge impulse transfer learning and model testing section. To increase the model's robustness, additional edge cases should have been considered to ensure accurate labelling. Scenarios not taken into account include instances where no apple is present, situations where the camera might misclassify an orange as an apple, or instances where the model might incorrectly classify a golden apple as a pink lady or granny smith.
   
 ## Future
 •	Creating a significantly larger test set to fine tune the model further. Currently the model predicts all 40 of the test-set correctly so any improvements to the model are not recognisable.
