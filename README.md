@@ -10,9 +10,9 @@ Supermarkets in the United Kingdom have approximately £3.2 of goods stolen annu
 
 
 ## Literature Review
-Pre-trained CNNs are typically trained on massive datasets containing millions of labelled images, covering a wide range of object types. The early layers within these pre-trained models detect low-level features such as textures and edges. Deeper levels recognise more complex features. The final layers of the pre-trained model are fine-tuned and trained on a new dataset for more accurate predictions on the new target classes. As a result of this setup, there are various benefits of using transfer learning over training a CNN from scratch. The knowledge obtained in the pre-trained CNN is maintained and improves the predictive accuracy of the new target class. The model requires less training data than building a CNN from scratch due to generalizability from the pre-training and reduces the probability of overfitting. This results in a less computationally expensive model to train for faster iterations to improve predictive accuracy. 
+Pre-trained CNNs are typically trained on massive datasets containing millions of labelled images, covering a wide range of object types. The early layers within these pre-trained models detect low-level features such as textures and edges. Deeper levels recognise more complex features. The final layers of the pre-trained model are fine-tuned and trained on a new dataset for more accurate predictions on the new target classes. As a result of this setup, there are various benefits of using transfer learning over training a CNN from scratch. The knowledge obtained in the pre-trained CNN is maintained and improves the predictive accuracy of the new target class. The model requires less training data than building a CNN from scratch due to generalizability from the pre-training and reduces the probability of overfitting. This results in a less computationally expensive model to train for faster iterations to improve predictive accuracy (Han, X. et al., 2021). 
 
-Research done by Yonis Gulzar in his paper “Fruit Image Classification Model Based on MobileNetV2 with Deep Transfer Learning Technique” found that the best CNN architecture for image classification on their fruit dataset was MobileNetV2. This bar chart shows the accuracy of different models achieved while training on the fruit dataset containing forty different types of fruits. As shown in Figure 1, MobileNetV2 achieves the highest accuracy of 89%. The remaining pre-trained CNNs were 5-11% lower in accuracy than MobileNetV2.
+Research done by Yonis Gulzar in his paper “Fruit Image Classification Model Based on MobileNetV2 with Deep Transfer Learning Technique” found that the best CNN architecture for image classification on their fruit dataset was MobileNetV2. This bar chart shows the accuracy of different models achieved while training on the fruit dataset containing forty different types of fruits. As shown in Figure 1, MobileNetV2 achieves the highest accuracy of 89%. The remaining pre-trained CNNs were 5-11% lower in accuracy than MobileNetV2 (Gulzar, Y., 2023).
 
 ![image](https://user-images.githubusercontent.com/73647889/232231429-0406aee2-7172-4090-811e-f776cc5ce0fc.png)
 
@@ -23,7 +23,7 @@ MobileNetV2 was designed with resource constrained environments such as embedded
 
 2. Linear Bottlenecks: By omitting ReLU activation from the bottleneck layers' end, MobileNetV2 preserves crucial information that might otherwise be lost, ensuring predictive accuracy. This results in a compact and efficient model that can still learn complex patterns, striking an good balance between efficiency and performance.
 
-3. Depthwise Separable Convolutions: MobileNetV2 leverages "depthwise separable convolutions" to minimize computational complexity compared to standard convolutions. By breaking down the convolution operation into depthwise and pointwise (1x1) convolutions, the network simplifies the process and cuts down on required computations, creating a more efficient and lightweight architecture.
+3. Depthwise Separable Convolutions: MobileNetV2 leverages "depthwise separable convolutions" to minimize computational complexity compared to standard convolutions. By breaking down the convolution operation into depthwise and pointwise (1x1) convolutions, the network simplifies the process and cuts down on required computations, creating a more efficient and lightweight architecture (Google, 2018).
 
 <img width="251" alt="MobileNetV2" src="https://user-images.githubusercontent.com/73647889/232118629-3c9b290b-a688-4ebb-bcce-d3648d6fc532.png">
 
@@ -50,7 +50,7 @@ A total of 47 experiments were conducted to identify the optimal algorithm for c
 | Neurons           | 0, 4, 8, 12, 16, 20, 24, 48, 62, 128 |
 | Epochs            | 20, 40, 50, 60, 70, 100, 120, 160    |
 | Dropout           | 0.1, 0.3                             |
-| data augmentation | off, on                              |
+| Data augmentation | off, on                              |
 
   
   
@@ -76,7 +76,7 @@ By using live classification, I could identify biases in the training dataset, I
 
 ### All Experiments
 
-| Test Number | Training data (n) | NN type     | Resolution | Width Multiplier | Neurons | drop out | Epochs | Learning rate | validation (%) | data augmentation | Accuracy | Loss | Testing Accuracy |
+| Test Number | Training data (n) | Transfer Learning Model | Resolution | Width Multiplier | Neurons | drop out | Epochs | Learning rate | validation (%) | data augmentation | Accuracy | Loss | Testing Accuracy |
 | ----------- | ----------------- | ----------- | ---------- | ---------------- | ------- | -------- | ------ | ------------- | -------------- | ----------------- | -------- | ---- | ---------------- |
 | 1           | 40                | MobileNetV2 | 96x96      | 0.35             | 16      | 0.1      | 20     | 0.0005        | 20             | off               | 75.00%   | 0.56 | 72%              |
 | 2           | 40                | MobileNetV2 | 96x96      | 0.35             | 16      | 0.1      | 20     | 0.0005        | 20             | on                | 75.00%   | 0.55 | 70%              |
@@ -153,5 +153,17 @@ More time should have been spent testing the model outside of the edge impulse t
 * Detect when no apple or object is present in the scene
 * Incorporate a broader selection of fruits and vegetables
 * Generate training and testing data that closely resemble a self-checkout environment for improved practicality
-  
+
+## References
+Gitnux, 2023. The Most Surprising Self Checkout Theft Statistics And Trends in 2023. [Online] 
+Available at: https://blog.gitnux.com/self-checkout-theft-statistics/#:~:text=Approximately%2020%25%20to%2033%25%20of,checkout%20lanes%20at%20least%20once.
+[Accessed 12 03 2023].
+
+Google, 2018. MobileNetV2: Inverted Residuals and Linear Bottlenecks, Cornel: Google.
+
+Gulzar, Y., 2023. Fruit Image Classification Model Based on MobileNetV2 with Deep Transfer Learning Technique. mpdi, 15(1906), pp. 3-15.
+
+Han, X. et al., 2021. Pre-trained models: Past, present and future. AI Open, Volume 2, pp. 225-250.
+
+
 
