@@ -17,7 +17,7 @@ Research done by Yonis Gulzar in his paper “Fruit Image Classification Model B
 ![image](https://user-images.githubusercontent.com/73647889/232231429-0406aee2-7172-4090-811e-f776cc5ce0fc.png)
 
 ## MobileNetV2 Neural Architecture
-MobileNetV2 was designed with resource constrained environments such as embedded devices and mobile phones. The neural architecture is as follows:
+MobileNetV2 was designed with resource constrained environments such as embedded devices and mobile phones. Illustration of the neural network architecture can be found in figure 2 below. The neural architecture is as follows:
 
 1. Inverted Residuals: This design, a variation of residual connections in ResNet, reverses the order of bottleneck and wider layers. Inverted residuals consist of an expansion layer, which increases channels, a depthwise convolutional layer for capturing spatial information, and a projection layer, which reduces channels while preserving spatial resolution. This results in reduced computational complexity and enhanced information flow.
 
@@ -32,13 +32,13 @@ The data was collected in batches of 40 photos containing a 50% split between la
 
 The photos were taken using the OV7675 camera – The photos image width was 160 and image height was 120 before being resized to 96x96 to be compatible with transfer learning, the smaller image size also makes the process of image classification less resource hungry. The data were then pre-processed and normalized. Colour plays a large role in the classification of apples, so the colour depth was set to RGB.
 
-Photos were taken with different backgrounds, on different surfaces, in light conditions, various camera distances from the apple, and a variety of angles. The figure below showcases a few of the pictures taken with the OV7675 in the training dataset.
+Photos were taken with different backgrounds, on different surfaces, in light conditions, various camera distances from the apple, and a variety of angles. Figure 3 below showcases a few of the pictures taken with the OV7675 in the training dataset.
 
 ![Apple Photos](https://user-images.githubusercontent.com/73647889/232118661-cec8043e-4380-4b00-b42e-8d301534d8d4.PNG)
 
 
 ## Testing
-A total of 47 experiments were conducted to identify the optimal algorithm for classifying Pink Lady and Granny Smith apples. Throughout the experimentation process, various hyperparameters, training set sizes, and transfer learning models were adjusted and compared. Key insights gained during the experimentation are detailed below, along with a table showcasing the various models and hyperparameters tested:
+A total of 47 experiments were conducted to identify the optimal algorithm for classifying Pink Lady and Granny Smith apples. Throughout the experimentation process, various hyperparameters, training set sizes, and transfer learning models were adjusted and compared. Table 1 below displays the various models and hyperparameters tested:
 
 
 | Category          | Setting                              |
@@ -54,13 +54,13 @@ A total of 47 experiments were conducted to identify the optimal algorithm for c
 
   
   
-Due to time constraints it was difficult to take 100s of photos, to overcome the small amount of training data I used data augmentation. This method creates random artificial images from the source data using various methods such as random rotations, shifts, and shears. I found the model only benefited from data augmentation when the number of epochs was increased otherwise data augmentation negatively impacted on predicting test data in my experiments. The increase in training data led to improved accuracy, but the gains diminished after reaching 120 training photos. The figure below illustrates the enhancement in model performance when using data augmentation compared to without it.
+Due to time constraints it was difficult to take 100s of photos, to overcome the small amount of training data I used data augmentation. This method creates random artificial images from the source data using various methods such as random rotations, shifts, and shears. I found the model only benefited from data augmentation when the number of epochs was increased otherwise data augmentation negatively impacted on predicting test data in my experiments. The increase in training data led to improved accuracy, but the gains diminished after reaching 120 training photos. Figure 4 below illustrates the enhancement in model performance when using data augmentation compared to without it.
 
 
 ![image](https://user-images.githubusercontent.com/73647889/232231518-2bbe0d46-5ffa-42e3-b373-2562ee8f209a.png)
 
 
-The models listed below share identical hyperparameters and were compared in terms of on-device performance on the Arduino Nano 33 BLE Sense (Cortex-M4F 64MHz). MobileNetV1 96x96 0.1 was ultimately selected due to its high accuracy and fast inferencing time. MobileNetV2, by contrast, exhibited a slower inferencing time. This discrepancy could be attributed to the more complex neural network architecture of V2 compared to V1. Another significant factor influencing inferencing time was the width multiplier; lower values resulted in faster inferencing times. Inferencing time is crucial in self-checkout applications, as it helps reduce queue times and provides a more responsive, improved user experience. Interestingly, MobileNetV1 outperformed MobileNetV2 in both accuracy and inferencing time while using the same hyperparameters and consuming fewer resources, as illustrated in the table below.
+The models listed below share identical hyperparameters and were compared in terms of on-device performance on the Arduino Nano 33 BLE Sense (Cortex-M4F 64MHz). MobileNetV1 96x96 0.1 was ultimately selected due to its high accuracy and fast inferencing time. MobileNetV2, by contrast, exhibited a slower inferencing time. This discrepancy could be attributed to the more complex neural network architecture of V2 compared to V1. Another significant factor influencing inferencing time was the width multiplier; lower values resulted in faster inferencing times. Inferencing time is crucial in self-checkout applications, as it helps reduce queue times and provides a more responsive, improved user experience. Interestingly, MobileNetV1 outperformed MobileNetV2 in both accuracy and inferencing time while using the same hyperparameters and consuming fewer resources, as illustrated in the table 2 below.
 
 
 | Model                  | Inferencing time (ms) | Peak ram usage (K) | Flash usage (K) | Accuracy (%) | Loss | Test Accuracy (%) |
@@ -134,7 +134,7 @@ The selected final model exhibits exceptional performance, achieving a 100% accu
 
 The selected model, MobileNetV1 96x96 0.1, exhibited different inferencing times when tested on various embedded devices. These findings emphasize that more powerful devices can substantially reduce inferencing time compared to less capable devices. In the context of self-checkout systems, faster inferencing times are preferable for a seamless user experience. However, the cost of the device should also be considered to balance the expenses associated with purchasing and replacing sensors against the performance improvements achieved.
 
-| Embedded Device | Inferencing time (ms) |
+| Embedded Device | Inferencing Time (ms) |
 | --- | --- |
 | Arduino Nano 33 BLE Sense (Cortex-M4F 64MHz)| 207 |
 | Arduino Nicla Vision (Cortex-M7 480MHz) | 16 |
