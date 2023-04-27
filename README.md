@@ -165,5 +165,7 @@ Gulzar, Y., 2023. Fruit Image Classification Model Based on MobileNetV2 with Dee
 
 Han, X. et al., 2021. Pre-trained models: Past, present and future. AI Open, Volume 2, pp. 225-250.
 
+## Edge Impulse Link
+https://studio.edgeimpulse.com/public/211800/latest
 
 
